@@ -3,58 +3,14 @@ import ReactDOM from 'react-dom'
 import withSubscribe from 'with-subscribe'
 import { Observable, interval } from 'rxjs'
 import $$observable from 'symbol-observable'
-
-class Subscribe extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      last: []
-    }
-  }
-
-  componentDidMount() {
-    this.props.to.forEach((observable, index) => {
-      observable[$$observable]().subscribe({
-        next: val => {
-          let last
-          if (this.state.last.length === 0) {
-            last = new Array(this.props.to.length)
-            last[index] = val
-          } else {
-            last = [ ...this.state.last ].map((item, index_) => {
-              if (index_ === index) {
-                return val
-              }
-              return item
-            })
-          }
-
-          this.setState({
-            last
-          })
-        }
-      })
-    })
-  }
-
-  render() {
-    return (
-      <div>
-        {this.props.children(...this.state.last)}
-      </div>
-    )
-  }
-}
-
-//
-// Models
-//
+import { Subscribe, devtool } from '../lib'
 
 class Counter {
   constructor() {
-    state = withSubscribe({
+    this.state = withSubscribe({
       count: 0
     })
+    devtool(this.state, { name: 'counter' })
   }
 
   increment() {
@@ -66,10 +22,6 @@ class Counter {
   }
 }
 const counter = new Counter()
-
-//
-// Views
-//
 
 function CounterView() {
   return (
@@ -93,6 +45,8 @@ class TimerView extends React.Component {
     super()
     this.interval1 = interval(2000)
     this.interval2 = interval(1000)
+    devtool(this.interval1, { name: 'interval1' })
+    devtool(this.interval2, { name: 'interval2' })
   }
 
   render() {
