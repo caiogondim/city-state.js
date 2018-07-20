@@ -50,19 +50,21 @@ class Subscribe extends React.Component {
 // Models
 //
 
-const Counter = withSubscribe(class {
+class Counter {
   constructor() {
-    this.count = 0
+    state = withSubscribe({
+      count: 0
+    })
   }
 
   increment() {
-    this.count += 1
+    this.state.count += 1
   }
 
   decrement() {
-    this.count -= 1
+    this.state.count -= 1
   }
-})
+}
 const counter = new Counter()
 
 //
@@ -71,15 +73,17 @@ const counter = new Counter()
 
 function CounterView() {
   return (
-    <Subscribe to={[counter]}>
-      {() => (
-        <div>
-          <h1>Counter</h1>
-          <p>state: {counter.count}</p>
-          <button onClick={() => counter.increment()}>Increment +</button><br />
-          <button onClick={() => counter.decrement()}>Decrement -</button><br />
-        </div>
-      )}
+    <Subscribe to={[counter.state]}>
+      {(counterState = {}) => {
+        return (
+          <div>
+            <h1>Counter</h1>
+            <p>state: {counterState.count}</p>
+            <button onClick={() => counter.increment()}>Increment +</button><br />
+            <button onClick={() => counter.decrement()}>Decrement -</button><br />
+          </div>
+        )
+      }}
     </Subscribe>
   )
 }
