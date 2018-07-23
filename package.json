@@ -11,6 +11,7 @@
     "webpack": "^4.8.3"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-preset-react": "^6.24.1",
@@ -26,7 +27,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --mode development",
-    "start:dev": "webpack-dev-server -d"
+    "start:dev": "webpack-dev-server -d",
+    "build": "babel lib -d build"
   },
   "repository": {
     "type": "git",
