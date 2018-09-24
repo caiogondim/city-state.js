@@ -1,30 +1,22 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import withSubscribe from 'with-subscribe'
-import { interval } from 'rxjs'
-import { Subscribe, devtool } from '../lib'
+const React = require('react')
+const ReactDOM = require('react-dom')
+const { interval } = require('rxjs')
+const { Subscribe, subscribable, devtool } = require('../build')
 
-class Counter {
-  constructor () {
-    this.state = withSubscribe({
-      count: 0
-    })
-    devtool(this.state, { name: 'counter' })
-  }
-
+const Counter = subscribable(class {
   increment () {
-    this.state.count += 1
+    this._state.count += 1
   }
 
   decrement () {
-    this.state.count -= 1
+    this._state.count -= 1
   }
-}
-const counter = new Counter()
+})
+const counter = new Counter({ state: { count: 0 }})
 
 function CounterView () {
   return (
-    <Subscribe to={[counter.state]}>
+    <Subscribe to={[counter]}>
       {(counterState = {}) => {
         return (
           <div>

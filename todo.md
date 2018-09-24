@@ -2,3 +2,9 @@
 - displayName = CityState.Subscribe
 - flow
 - tests
+- pass current state on first call
+- readonly state
+- use $$observable
+- rename to scribe?
+- fix test
+- subscribable as decorator
