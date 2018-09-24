@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const { Subscribable } = require('../build/index')
+const { subscribable } = require('../build/index')
 
 // Observable API: https://github.com/tc39/proposal-observable#api
 it('implements subscribe method from Observable API', () => {
@@ -33,5 +33,9 @@ it('calls subscribers when state change', () => {
 })
 
 it('doesnt allow state to be changed externally', () => {
+
+})
+
+it('throws error if state is changed since it is read-only', () => {
 
 })

@@ -8,3 +8,4 @@
 - rename to scribe?
 - fix test
 - subscribable as decorator
+- merge observables on devtools
