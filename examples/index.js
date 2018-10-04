@@ -1,7 +1,7 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 const { interval } = require('rxjs')
-const { Subscribe, subscribable, devtool } = require('../lib')
+const { Subscribe, subscribable, devtool } = require('../src')
 
 @subscribable
 class Counter {

@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const { subscribable } = require('../lib/index')
+const { subscribable } = require('../src/index')
 
 // Observable API: https://github.com/tc39/proposal-observable#api
 it('implements subscribe method from Observable API', () => {

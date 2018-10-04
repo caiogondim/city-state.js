@@ -1,6 +1,5 @@
 - redux on example
 - displayName = CityState.Subscribe
-- flow
 - tests
 - pass current state on first call
 - readonly state
