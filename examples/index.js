@@ -13,7 +13,7 @@ class Counter {
     this._state.count -= 1
   }
 }
-counter = new Counter({ state: { count: 0 }})
+const counter = new Counter({ state: { count: 0 } })
 
 function CounterView () {
   return (
