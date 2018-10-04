@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+const $$observable = require('symbol-observable').default
 const { subscribable } = require('../src/index')
 
 // Observable API: https://github.com/tc39/proposal-observable#api
@@ -77,4 +78,85 @@ it('works as a function', () => {
   foo.increment()
 
   expect(foo.state.count).toEqual(1)
+})
+
+// Tests adapted from https://github.com/reactjs/redux/blob/4e5f7ef3569e9ef6d02f7b3043b290dc093c853b/test/createStore.spec.js#L613
+describe('Symbol.observable interop point', () => {
+  it('exists', () => {
+    @subscribable
+    class Foo {}
+    const foo = new Foo({ state: {} })
+    expect(typeof foo[$$observable]).toBe('function')
+  })
+
+  describe('returned value', () => {
+    it('is subscribable', () => {
+      @subscribable
+      class Foo {}
+      const foo = new Foo({ state: {} })
+      const obs = foo[$$observable]()
+      expect(typeof obs.subscribe).toBe('function')
+    })
+
+    it('returns a subscription object when subscribed', () => {
+      @subscribable
+      class Foo {}
+      const foo = new Foo({ state: {} })
+      const obs = foo[$$observable]()
+      const sub = obs.subscribe({})
+      expect(typeof sub.unsubscribe).toBe('function')
+    })
+  })
+
+  it('passes an integration test with no unsubscribe', () => {
+    @subscribable
+    class Foo {
+      increment() {
+        this._state.count += 1
+      }
+    }
+    const foo = new Foo({ state: { count: 0 } })
+    const observable = foo[$$observable]()
+    const results = []
+
+    observable.subscribe({
+      next (observed) {
+        results.push({ ...observed })
+      }
+    })
+
+    foo.increment()
+
+    expect(results).toEqual([
+      { count: 0 },
+      { count: 1 }
+    ])
+  })
+
+  it('passes an integration test with an unsubscribe', () => {
+    @subscribable
+    class Foo {
+      increment() {
+        this._state.count += 1
+      }
+    }
+    const foo = new Foo({ state: { count: 0 } })
+    const observable = foo[$$observable]()
+    const results = []
+
+    const sub = observable.subscribe({
+      next (observed) {
+        results.push({ ...observed })
+      }
+    })
+
+    foo.increment()
+    sub.unsubscribe()
+    foo.increment()
+
+    expect(results).toEqual([
+      { count: 0 },
+      { count: 1 },
+    ])
+  })
 })

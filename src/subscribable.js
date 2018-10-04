@@ -1,5 +1,6 @@
 const readOnlyCopy = require('./util/read-only-copy')
 const withSubscribe = require('with-subscribe')
+const $$observable = require('symbol-observable').default
 
 function applySubscribableInterface (BaseClass) {
   class Subscribable extends BaseClass {
@@ -25,6 +26,10 @@ function applySubscribableInterface (BaseClass) {
 
     get subscribe () {
       return this._state.subscribe
+    }
+
+    get [$$observable] () {
+      return this._state[$$observable]
     }
   }
 
