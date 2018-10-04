@@ -2,9 +2,8 @@
 - displayName = CityState.Subscribe
 - tests
 - pass current state on first call
-- readonly state
 - use $$observable
-- rename to city-state
+- rename to fief
 - fix test
 - merge observables on devtools
 - rename lib/ to src/

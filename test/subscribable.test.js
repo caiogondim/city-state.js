@@ -31,7 +31,7 @@ it('calls subscribers when state change', () => {
   foo.increment()
   foo.decrement()
   foo.increment()
-  expect(count).toEqual(3)
+  expect(count).toEqual(4)
   expect(foo.state.count).toEqual(1)
 })
 
