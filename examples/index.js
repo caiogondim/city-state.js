@@ -1,9 +1,10 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 const { interval } = require('rxjs')
-const { Subscribe, subscribable, devtool } = require('../build')
+const { Subscribe, subscribable, devtool } = require('../lib')
 
-const Counter = subscribable(class {
+@subscribable
+class Counter {
   increment () {
     this._state.count += 1
   }
@@ -11,8 +12,8 @@ const Counter = subscribable(class {
   decrement () {
     this._state.count -= 1
   }
-})
-const counter = new Counter({ state: { count: 0 }})
+}
+counter = new Counter({ state: { count: 0 }})
 
 function CounterView () {
   return (

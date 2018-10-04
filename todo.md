@@ -5,7 +5,8 @@
 - pass current state on first call
 - readonly state
 - use $$observable
-- rename to scribe?
+- rename to city-state
 - fix test
-- subscribable as decorator
 - merge observables on devtools
+- rename lib/ to src/
+- cache for get state
