@@ -12,11 +12,15 @@ function applySubscribableInterface (BaseClass) {
         throw TypeError('state must be an object')
       }
 
+      this._stateReadOnlyCache
       this._state = withSubscribe(state)
+      this._state.subscribe((state) => {
+        this._stateReadOnlyCache = readOnlyCopy(state)
+      })
     }
 
     get state () {
-      return readOnlyCopy(this._state)
+      return this._stateReadOnlyCache
     }
 
     get subscribe () {
