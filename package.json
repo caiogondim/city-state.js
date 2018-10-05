@@ -4,7 +4,9 @@
   "description": "",
   "main": "build/index.js",
   "directories": {
-    "lib": "lib"
+    "src": "src",
+    "build": "build",
+    "test": "test"
   },
   "dependencies": {
     "clone": "^2.1.2",
