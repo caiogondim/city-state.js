@@ -1,7 +1,12 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 const { interval } = require('rxjs')
+const redux = require('redux')
 const { Subscribe, subscribable, devtool } = require('../src')
+
+//
+// city-state
+//
 
 @subscribable
 class Counter {
@@ -31,6 +36,48 @@ function CounterView () {
     </Subscribe>
   )
 }
+
+//
+// redux
+//
+
+function counterReducer(state = { count: 0 }, action) {
+  switch(action.type) {
+    case 'INCREMENT':
+      return {
+        count: state.count + 1
+      }
+    case 'DECREMENT':
+      return {
+        count: state.count - 1
+      }
+    default:
+      return state
+  }
+}
+
+const counterStore = redux.createStore(counterReducer)
+
+function CounterReduxView () {
+  return (
+    <Subscribe to={[counterStore]}>
+      {(counterState = {}) => {
+        return (
+          <div>
+            <h1>Counter with redux</h1>
+            <p>state: {counterState.count}</p>
+            <button onClick={() => counterStore.dispatch({ type: 'INCREMENT' })}>Increment +</button><br />
+            <button onClick={() => counterStore.dispatch({ type: 'DECREMENT' })}>Decrement -</button><br />
+          </div>
+        )
+      }}
+    </Subscribe>
+  )
+}
+
+//
+// rxjs
+//
 
 class TimerView extends React.Component {
   constructor () {
@@ -62,6 +109,7 @@ function Main () {
   return (
     <div>
       <CounterView />
+      <CounterReduxView />
       <TimerView />
     </div>
   )

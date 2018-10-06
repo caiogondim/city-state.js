@@ -1,4 +1,5 @@
 const React = require('react')
+const $$observable = require('symbol-observable').default
 
 class Subscribe extends React.Component {
   constructor () {
@@ -11,8 +12,8 @@ class Subscribe extends React.Component {
 
   componentDidMount () {
     this.props.to.forEach((observable, index) => {
-      const subscription = observable.subscribe({
-        next: val => {
+      let subscription
+      const next = val => {
           let last
           if (this.state.last.length === 0) {
             last = new Array(this.props.to.length)
@@ -30,7 +31,14 @@ class Subscribe extends React.Component {
             last
           })
         }
-      })
+
+      if (typeof observable[$$observable] === 'function') {
+        subscription = observable[$$observable]().subscribe({
+          next
+        })
+      } else {
+        subscription = observable.subscribe(next)
+      }
 
       this._subscriptions.push(subscription)
     })
