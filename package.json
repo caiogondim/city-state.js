@@ -45,7 +45,8 @@
     "start": "webpack --mode development",
     "start:dev": "webpack-dev-server -d",
     "build": "babel src -d build",
-    "lint": "standard --fix 'lib/*.js' 'examples/index.js'"
+    "lint": "standard --fix 'lib/*.js' 'examples/index.js'",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
