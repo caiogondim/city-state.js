@@ -11,7 +11,6 @@
   "dependencies": {
     "clone": "^2.1.2",
     "symbol-observable": "^1.2.0",
-    "webpack": "^4.8.3",
     "with-subscribe": "^2.0.0"
   },
   "devDependencies": {
@@ -35,7 +34,8 @@
     "rxjs-compat": "^6.1.0",
     "standard": "^11.0.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9"
+    "webpack-dev-server": "^3.1.9",
+    "webpack": "^4.8.3",
   },
   "scripts": {
     "test": "jest",
