@@ -24,6 +24,7 @@ class Counter {
   }
 }
 const counter = new Counter()
+devtool(counter, { name: 'Counter' })
 
 function CounterView () {
   return (
@@ -70,6 +71,7 @@ class CounterAsync {
   }
 }
 const counterAsync = new CounterAsync()
+devtool(counterAsync, { name: 'CounterAsync' })
 
 function CounterAsyncView () {
   return (
