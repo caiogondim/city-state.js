@@ -52,7 +52,7 @@ it('re-renders children whenever observable changes', async () => {
   function FooComponent() {
     return (
       <Subscribe to={[foo]}>
-        {(fooState = {}) => {
+        {(fooState) => {
           idleRender.reset()
           return (
             <span className="fooState">{fooState.count}</span>
@@ -79,7 +79,7 @@ it('accepts multiple observables', async () => {
   function FooComponent() {
     return (
       <Subscribe to={[foo, bar]}>
-        {(fooState = {}, barState = {}) => {
+        {(fooState, barState) => {
           idleRender.reset()
           return (
             <div>
@@ -130,7 +130,7 @@ it('unsubscribe from all subscriptions when component unmounts', async () => {
 
       return (
         <Subscribe to={[foo]}>
-          {(fooState = {}) => {
+          {(fooState) => {
             idleRender.reset()
             return (
               <div>

@@ -10,7 +10,7 @@ const { Subscribe, subscribable, devtool } = require('../src')
 
 @subscribable
 class Counter {
-  constructor() {
+  constructor () {
     this._state = { count: 0 }
   }
 
@@ -27,7 +27,7 @@ const counter = new Counter()
 function CounterView () {
   return (
     <Subscribe to={[counter]}>
-      {(counterState = {}) => {
+      {(counterState) => {
         return (
           <div>
             <h1>Counter</h1>
@@ -45,8 +45,8 @@ function CounterView () {
 // redux
 //
 
-function counterReducer(state = { count: 0 }, action) {
-  switch(action.type) {
+function counterReducer (state = { count: 0 }, action) {
+  switch (action.type) {
     case 'INCREMENT':
       return {
         count: state.count + 1

@@ -2,21 +2,20 @@ const React = require('react')
 const $$observable = require('symbol-observable').default
 
 class Subscribe extends React.Component {
-  constructor () {
+  constructor (props) {
     super()
     this.state = {
-      last: []
+      last: [],
+      isMounted: false
     }
     this._subscriptions = []
-  }
 
-  componentDidMount () {
-    this.props.to.forEach((observable, index) => {
+    props.to.forEach((observable, index) => {
       let subscription
       const next = val => {
           let last
           if (this.state.last.length === 0) {
-            last = new Array(this.props.to.length)
+            last = new Array(props.to.length)
             last[index] = val
           } else {
             last = [...this.state.last].map((item, index_) => {
@@ -27,9 +26,13 @@ class Subscribe extends React.Component {
             })
           }
 
-          this.setState({
-            last
-          })
+          if (this.state.isMounted) {
+            this.setState({
+              last
+            })
+          } else {
+            this.state.last = last
+          }
         }
 
       if (typeof observable[$$observable] === 'function') {
@@ -41,6 +44,12 @@ class Subscribe extends React.Component {
       }
 
       this._subscriptions.push(subscription)
+    })
+  }
+
+  componentDidMount () {
+    this.setState({
+      isMounted: true
     })
   }
 
