@@ -10,6 +10,12 @@ configure({ adapter: new Adapter() });
 
 @subscribable
 class Foo {
+  constructor() {
+    this._state = {
+      count: 0
+    }
+  }
+
   increment() {
     this._state.count += 1
   }
@@ -39,7 +45,7 @@ function createIdleForMsPromise(ms = 1) {
 //
 
 it('re-renders children whenever observable changes', async () => {
-  const foo = new Foo({ state: { count: 0 } })
+  const foo = new Foo()
 
   const idleRender = createIdleForMsPromise()
 
@@ -65,8 +71,8 @@ it('re-renders children whenever observable changes', async () => {
 })
 
 it('accepts multiple observables', async () => {
-  const foo = new Foo({ state: { count: 0 } })
-  const bar = new Foo({ state: { count: 1 } })
+  const foo = new Foo()
+  const bar = new Foo()
 
   const idleRender = createIdleForMsPromise()
 
@@ -90,6 +96,7 @@ it('accepts multiple observables', async () => {
 
   foo.increment()
   bar.increment()
+  bar.increment()
 
   await idleRender
   expect(wrapper.find('.fooState').text()).toEqual('1')
@@ -97,7 +104,7 @@ it('accepts multiple observables', async () => {
 })
 
 it('unsubscribe from all subscriptions when component unmounts', async () => {
-  const foo = new Foo({ state: { count: 0 } })
+  const foo = new Foo()
 
   const idleRender = createIdleForMsPromise()
 

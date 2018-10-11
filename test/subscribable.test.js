@@ -7,13 +7,19 @@ const { subscribable } = require('../src/index')
 it('implements subscribe method from Observable API', () => {
   @subscribable
   class Foo {}
-  const foo = new Foo({ state: {} })
+  const foo = new Foo()
   expect(typeof foo.subscribe).toEqual('function')
 })
 
 it('calls subscribers when state change', () => {
   @subscribable
   class Foo {
+    constructor() {
+      this._state = {
+        count: 0
+      }
+    }
+
     increment() {
       this._state.count += 1
     }
@@ -23,7 +29,7 @@ it('calls subscribers when state change', () => {
     }
   }
 
-  const foo = new Foo({ state: { count: 0 } })
+  const foo = new Foo()
   let count = 0
   function subscriber() {
     count += 1
@@ -38,9 +44,13 @@ it('calls subscribers when state change', () => {
 
 it('doesnt allow state to be changed externally', () => {
   @subscribable
-  class Foo {}
+  class Foo {
+    constructor() {
+      this._state = { count: 0 }
+    }
+  }
 
-  const foo = new Foo({ state: { count: 0 } })
+  const foo = new Foo()
 
   expect(() => this.state.count = 3).toThrow(Error)
 })
@@ -48,6 +58,10 @@ it('doesnt allow state to be changed externally', () => {
 it('works as a decorator', () => {
   @subscribable
   class Foo {
+    constructor() {
+      this._state = { count: 0 }
+    }
+
     increment() {
       this._state.count += 1
     }
@@ -57,7 +71,7 @@ it('works as a decorator', () => {
     }
   }
 
-  const foo = new Foo({ state: { count: 0 } })
+  const foo = new Foo()
   foo.increment()
 
   expect(foo.state.count).toEqual(1)
@@ -65,6 +79,9 @@ it('works as a decorator', () => {
 
 it('works as a function', () => {
   const Foo = subscribable(class Foo {
+    constructor() {
+      this._state = { count: 0 }
+    }
     increment() {
       this._state.count += 1
     }
@@ -74,7 +91,7 @@ it('works as a function', () => {
     }
   })
 
-  const foo = new Foo({ state: { count: 0 } })
+  const foo = new Foo()
   foo.increment()
 
   expect(foo.state.count).toEqual(1)
@@ -85,7 +102,7 @@ describe('Symbol.observable interop point', () => {
   it('exists', () => {
     @subscribable
     class Foo {}
-    const foo = new Foo({ state: {} })
+    const foo = new Foo()
     expect(typeof foo[$$observable]).toBe('function')
   })
 
@@ -93,7 +110,7 @@ describe('Symbol.observable interop point', () => {
     it('is subscribable', () => {
       @subscribable
       class Foo {}
-      const foo = new Foo({ state: {} })
+      const foo = new Foo()
       const obs = foo[$$observable]()
       expect(typeof obs.subscribe).toBe('function')
     })
@@ -101,7 +118,7 @@ describe('Symbol.observable interop point', () => {
     it('returns a subscription object when subscribed', () => {
       @subscribable
       class Foo {}
-      const foo = new Foo({ state: {} })
+      const foo = new Foo()
       const obs = foo[$$observable]()
       const sub = obs.subscribe({})
       expect(typeof sub.unsubscribe).toBe('function')
@@ -111,11 +128,15 @@ describe('Symbol.observable interop point', () => {
   it('passes an integration test with no unsubscribe', () => {
     @subscribable
     class Foo {
+      constructor() {
+        this._state = { count: 0 }
+      }
+
       increment() {
         this._state.count += 1
       }
     }
-    const foo = new Foo({ state: { count: 0 } })
+    const foo = new Foo()
     const observable = foo[$$observable]()
     const results = []
 
@@ -136,11 +157,15 @@ describe('Symbol.observable interop point', () => {
   it('passes an integration test with an unsubscribe', () => {
     @subscribable
     class Foo {
+      constructor() {
+        this._state = { count: 0 }
+      }
+
       increment() {
         this._state.count += 1
       }
     }
-    const foo = new Foo({ state: { count: 0 } })
+    const foo = new Foo()
     const observable = foo[$$observable]()
     const results = []
 

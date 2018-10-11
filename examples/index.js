@@ -10,6 +10,10 @@ const { Subscribe, subscribable, devtool } = require('../src')
 
 @subscribable
 class Counter {
+  constructor() {
+    this._state = { count: 0 }
+  }
+
   increment () {
     this._state.count += 1
   }
@@ -18,7 +22,7 @@ class Counter {
     this._state.count -= 1
   }
 }
-const counter = new Counter({ state: { count: 0 } })
+const counter = new Counter()
 
 function CounterView () {
   return (

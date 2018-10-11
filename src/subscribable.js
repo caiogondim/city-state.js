@@ -7,14 +7,9 @@ function applySubscribableInterface (BaseClass) {
     constructor (...args) {
       super(...args)
 
-      const { state } = args[0]
-
-      if (typeof state !== 'object') {
-        throw TypeError('state must be an object')
-      }
-
       this._stateReadOnlyCache
-      this._state = withSubscribe(state)
+      this._state = this._state || {}
+      this._state = withSubscribe(this._state)
       this._state.subscribe((state) => {
         this._stateReadOnlyCache = readOnlyCopy(state)
       })
