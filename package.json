@@ -19,6 +19,7 @@
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "async-msleep": "^1.0.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
@@ -33,9 +34,9 @@
     "rxjs": "^6.1.0",
     "rxjs-compat": "^6.1.0",
     "standard": "^11.0.1",
+    "webpack": "^4.8.3",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9",
-    "webpack": "^4.8.3"
+    "webpack-dev-server": "^3.1.9"
   },
   "scripts": {
     "test": "jest",
