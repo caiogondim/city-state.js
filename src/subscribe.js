@@ -11,37 +11,32 @@ class Subscribe extends React.Component {
     this._subscriptions = []
 
     props.to.forEach((observable, index) => {
-      let subscription
       const next = val => {
-          let last
-          if (this.state.last.length === 0) {
-            last = new Array(props.to.length)
-            last[index] = val
-          } else {
-            last = [...this.state.last].map((item, index_) => {
-              if (index_ === index) {
-                return val
-              }
-              return item
-            })
-          }
-
-          if (this.state.isMounted) {
-            this.setState({
-              last
-            })
-          } else {
-            this.state.last = last
-          }
+        let last
+        if (this.state.last.length === 0) {
+          last = new Array(props.to.length)
+          last[index] = val
+        } else {
+          last = [...this.state.last].map((item, index_) => {
+            if (index_ === index) {
+              return val
+            }
+            return item
+          })
         }
 
-      if (typeof observable[$$observable] === 'function') {
-        subscription = observable[$$observable]().subscribe({
-          next
-        })
-      } else {
-        subscription = observable.subscribe(next)
+        if (this.state.isMounted) {
+          this.setState({
+            last
+          })
+        } else {
+          this.state.last = last
+        }
       }
+
+      const subscription = observable[$$observable]().subscribe({
+        next
+      })
 
       this._subscriptions.push(subscription)
     })
