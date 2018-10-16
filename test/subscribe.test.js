@@ -25,21 +25,6 @@ class Foo {
   }
 }
 
-function createIdleForMsPromise(ms = 1) {
-  let timeout
-  let resolve
-  const promise = new Promise(resolve_ => {
-    resolve = resolve_
-    timeout = setTimeout(resolve, ms)
-  })
-  promise.reset = () => {
-    clearTimeout(timeout)
-    timeout = setTimeout(resolve, ms)
-  }
-
-  return promise
-}
-
 //
 // Tests
 //
@@ -47,13 +32,10 @@ function createIdleForMsPromise(ms = 1) {
 it('re-renders children whenever observable changes', async () => {
   const foo = new Foo()
 
-  const idleRender = createIdleForMsPromise()
-
   function FooComponent() {
     return (
       <Subscribe to={[foo]}>
         {(fooState) => {
-          idleRender.reset()
           return (
             <span className="fooState">{fooState.count}</span>
           )
@@ -66,7 +48,6 @@ it('re-renders children whenever observable changes', async () => {
 
   foo.increment()
 
-  await idleRender
   expect(wrapper.find('.fooState').text()).toEqual('1')
 })
 
@@ -74,13 +55,11 @@ it('accepts multiple observables', async () => {
   const foo = new Foo()
   const bar = new Foo()
 
-  const idleRender = createIdleForMsPromise()
 
   function FooComponent() {
     return (
       <Subscribe to={[foo, bar]}>
         {(fooState, barState) => {
-          idleRender.reset()
           return (
             <div>
               <span className="fooState">{fooState.count}</span>
@@ -98,15 +77,12 @@ it('accepts multiple observables', async () => {
   bar.increment()
   bar.increment()
 
-  await idleRender
   expect(wrapper.find('.fooState').text()).toEqual('1')
   expect(wrapper.find('.barState').text()).toEqual('2')
 })
 
 it('unsubscribe from all subscriptions when component unmounts', async () => {
   const foo = new Foo()
-
-  const idleRender = createIdleForMsPromise()
 
   class FooComponent extends React.Component {
     constructor() {
@@ -124,14 +100,12 @@ it('unsubscribe from all subscriptions when component unmounts', async () => {
     }
 
     render() {
-      idleRender.reset()
 
       if (this.state.isHidden) return null
 
       return (
         <Subscribe to={[foo]}>
           {(fooState) => {
-            idleRender.reset()
             return (
               <div>
                 <span className="fooState">{fooState.count}</span>
