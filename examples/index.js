@@ -1,6 +1,6 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
-const { interval } = require('rxjs')
+const { interval, from } = require('rxjs')
 const redux = require('redux')
 const msleep = require('async-msleep')
 const { Subscribe, subscribable, devtool } = require('../src')
@@ -129,6 +129,29 @@ function CounterReduxView () {
 }
 
 //
+// Native Observable
+//
+
+const counter2 = new Counter()
+const observableCounter = from(counter2)
+function ObservableCounterView () {
+  return (
+    <Subscribe to={[observableCounter]}>
+      {(counterState = {}) => {
+        return (
+          <div>
+            <h1>Counter Observable</h1>
+            <p>state: {counterState.count}</p>
+            <button onClick={() => counter2.increment()}>Increment +</button><br />
+            <button onClick={() => counter2.decrement()}>Decrement -</button><br />
+          </div>
+        )
+      }}
+    </Subscribe>
+  )
+}
+
+//
 // rxjs
 //
 
@@ -147,7 +170,7 @@ class TimerView extends React.Component {
         {(time1, time2) => {
           return (
             <div>
-              <h1>Timer</h1>
+              <h1>rxjs</h1>
               <p>time1: {time1}</p>
               <p>time2: {time2}</p>
             </div>
@@ -164,6 +187,7 @@ function Main () {
       <CounterView />
       <CounterAsyncView />
       <CounterReduxView />
+      <ObservableCounterView />
       <TimerView />
     </div>
   )
