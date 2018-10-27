@@ -124,6 +124,9 @@ const foo = new Foo()
 devtool(foo, { name: 'foo' })
 ```
 
+## Related
+- [city-state-preact](https://github.com/caiogondim/city-state-preact.js)
+
 ## Sponsor
 
 If you found this library useful and are willing to donate, transfer some
