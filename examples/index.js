@@ -24,7 +24,9 @@ class Counter {
   }
 }
 const counter = new Counter()
-devtool(counter, { name: 'Counter' })
+try {
+  devtool(counter, { name: 'Counter' })
+} catch (_) {}
 
 function CounterView () {
   return (
@@ -69,7 +71,9 @@ class CounterAsync {
   }
 }
 const counterAsync = new CounterAsync()
-devtool(counterAsync, { name: 'CounterAsync' })
+try {
+  devtool(counterAsync, { name: 'CounterAsync' })
+} catch (_) {}
 
 function CounterAsyncView () {
   return (
@@ -113,7 +117,6 @@ function CounterReduxView () {
   return (
     <Subscribe to={[counterStore]}>
       {(counterState = {}) => {
-        console.log('coun', counterState)
         return (
           <div>
             <h1>Counter with redux</h1>
@@ -131,24 +134,31 @@ function CounterReduxView () {
 // Native Observable
 //
 
-const counter2 = new Counter()
-const observableCounter = from(counter2)
-function ObservableCounterView () {
-  return (
-    <Subscribe to={[observableCounter]}>
-      {(counterState = {}) => {
-        return (
-          <div>
-            <h1>Counter Observable</h1>
-            <p>state: {counterState.count}</p>
-            <button onClick={() => counter2.increment()}>Increment +</button><br />
-            <button onClick={() => counter2.decrement()}>Decrement -</button><br />
-          </div>
-        )
-      }}
-    </Subscribe>
-  )
+let ObservableCounterView = null
+// RxJS is throwing an error on Safari
+try {
+  const counter2 = new Counter()
+  const observableCounter = from(counter2)
+  ObservableCounterView = () => {
+    return (
+      <Subscribe to={[observableCounter]}>
+        {(counterState = {}) => {
+          return (
+            <div>
+              <h1>Counter Observable</h1>
+              <p>state: {counterState.count}</p>
+              <button onClick={() => counter2.increment()}>Increment +</button><br />
+              <button onClick={() => counter2.decrement()}>Decrement -</button><br />
+            </div>
+          )
+        }}
+      </Subscribe>
+    )
+  }
+} catch (error) {
+  ObservableCounterView = () => null
 }
+
 
 //
 // rxjs
@@ -159,8 +169,15 @@ class TimerView extends React.Component {
     super()
     this.interval1 = interval(2000)
     this.interval2 = interval(1000)
-    devtool(this.interval1, { name: 'interval1' })
-    devtool(this.interval2, { name: 'interval2' })
+    try {
+      devtool(this.interval1, { name: 'interval1' })
+      devtool(this.interval2, { name: 'interval2' })
+    } catch (_) {}
+  }
+
+  // RxJS is throwing an error on Safari
+  componentDidCatch() {
+    return null
   }
 
   render () {
