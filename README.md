@@ -51,7 +51,7 @@ import { Subscribe } from 'city-state'
 export default function CounterView({ counter }) {
   <Subscribe to={[counter]}>
     {(counter) => (
-      <span>Counter: {counterState.counter}</span>
+      <span>Counter: {counter.count}</span>
     )}
   </Subscribe>
 }
@@ -63,7 +63,7 @@ Redux offers an Observable API that could be used with `Subscribe`.
 function CounterView({ reduxStore }) {
   <Subscribe to=[reduxStore]>
     {currentState => (
-      <span>Counter: {currentState.counter}</span>
+      <span>Counter: {currentState.count}</span>
     )}
   </Subscribe>
 }
@@ -101,7 +101,7 @@ class Counter {
 
 const counter = new Counter()
 counter.subscribe(() => {
-  console.log(counter.state.count)
+  console.log(counter.count)
 }) // => 0
 
 counter.increment() // => 1
