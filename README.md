@@ -14,7 +14,7 @@ npm install --save city-state
 
 ### `<Subscribe>` component
 
-Subscribes to an Observable (like a [subscribable](#@subscribable)) and updates
+Subscribes to an Observable (like a [subscribable](#subscribable)) and updates
 children whenever there is a new value.
 
 ```js
