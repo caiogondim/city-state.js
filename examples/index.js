@@ -12,15 +12,15 @@ const { Subscribe, subscribable, devtool } = require('../src')
 @subscribable
 class Counter {
   constructor () {
-    this._state = { count: 0 }
+    this.count = 0
   }
 
   increment () {
-    this._state.count += 1
+    this.count += 1
   }
 
   decrement () {
-    this._state.count -= 1
+    this.count -= 1
   }
 }
 const counter = new Counter()
@@ -29,11 +29,11 @@ devtool(counter, { name: 'Counter' })
 function CounterView () {
   return (
     <Subscribe to={[counter]}>
-      {(counterState) => {
+      {() => {
         return (
           <div>
             <h1>Counter</h1>
-            <p>state: {counterState.count}</p>
+            <p>state: {counter.count}</p>
             <button onClick={() => counter.increment()}>Increment +</button><br />
             <button onClick={() => counter.decrement()}>Decrement -</button><br />
           </div>
@@ -50,24 +50,22 @@ function CounterView () {
 @subscribable
 class CounterAsync {
   constructor () {
-    this._state = {
-      count: 0,
-      isComputing: false
-    }
+    this.count = 0
+    this.isComputing = false
   }
 
   async increment () {
-    this._state.isComputing = true
+    this.isComputing = true
     await msleep(1000)
-    this._state.count += 1
-    this._state.isComputing = false
+    this.count += 1
+    this.isComputing = false
   }
 
   async decrement () {
-    this._state.isComputing = true
+    this.isComputing = true
     await msleep(1000)
-    this._state.count -= 1
-    this._state.isComputing = false
+    this.count -= 1
+    this.isComputing = false
   }
 }
 const counterAsync = new CounterAsync()
@@ -76,13 +74,13 @@ devtool(counterAsync, { name: 'CounterAsync' })
 function CounterAsyncView () {
   return (
     <Subscribe to={[counterAsync]}>
-      {(counterState) => {
+      {(counterAsync) => {
         return (
           <div>
             <h1>Counter Async</h1>
-            <p>state: {counterState.isComputing ? '...' : counterState.count}</p>
-            <button disabled={counterState.isComputing} onClick={() => counterAsync.increment()}>Increment +</button><br />
-            <button disabled={counterState.isComputing} onClick={() => counterAsync.decrement()}>Decrement -</button><br />
+            <p>state: {counterAsync.isComputing ? '...' : counterAsync.count}</p>
+            <button disabled={counterAsync.isComputing} onClick={() => counterAsync.increment()}>Increment +</button><br />
+            <button disabled={counterAsync.isComputing} onClick={() => counterAsync.decrement()}>Decrement -</button><br />
           </div>
         )
       }}
@@ -115,6 +113,7 @@ function CounterReduxView () {
   return (
     <Subscribe to={[counterStore]}>
       {(counterState = {}) => {
+        console.log('coun', counterState)
         return (
           <div>
             <h1>Counter with redux</h1>
@@ -171,8 +170,8 @@ class TimerView extends React.Component {
           return (
             <div>
               <h1>rxjs</h1>
-              <p>time1: {time1}</p>
-              <p>time2: {time2}</p>
+              <p>time1: {time1 || 0}</p>
+              <p>time2: {time2 || 0}</p>
             </div>
           )
         }}
