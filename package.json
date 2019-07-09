@@ -1,6 +1,6 @@
 {
   "name": "city-state",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Observable and encapsulated state management",
   "main": "build/index.js",
   "directories": {
@@ -9,7 +9,6 @@
     "test": "test"
   },
   "dependencies": {
-    "clone": "^2.1.2",
     "symbol-observable": "^1.2.0",
     "with-subscribe": "^2.0.0"
   },
@@ -31,8 +30,8 @@
     "react": "^16.4.2",
     "react-dom": "^16.3.2",
     "redux": "^4.0.0",
-    "rxjs": "^6.1.0",
-    "rxjs-compat": "^6.1.0",
+    "rxjs": "6.5.2",
+    "rxjs-compat": "6.5.2",
     "standard": "^11.0.1",
     "webpack": "^4.8.3",
     "webpack-cli": "^3.1.2",
