@@ -159,7 +159,6 @@ try {
   ObservableCounterView = () => null
 }
 
-
 //
 // rxjs
 //
@@ -176,7 +175,7 @@ class TimerView extends React.Component {
   }
 
   // RxJS is throwing an error on Safari
-  componentDidCatch() {
+  componentDidCatch () {
     return null
   }
 
