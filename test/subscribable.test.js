@@ -15,17 +15,15 @@ it('calls subscribers when state change', () => {
   @subscribable
   class Foo {
     constructor() {
-      this._state = {
-        count: 0
-      }
+      this.count = 0
     }
 
     increment() {
-      this._state.count += 1
+      this.count += 1
     }
 
     decrement() {
-      this._state.count -= 1
+      this.count -= 1
     }
   }
 
@@ -39,14 +37,14 @@ it('calls subscribers when state change', () => {
   foo.decrement()
   foo.increment()
   expect(count).toEqual(4)
-  expect(foo.state.count).toEqual(1)
+  expect(foo.count).toEqual(1)
 })
 
 it('doesnt allow state to be changed externally', () => {
   @subscribable
   class Foo {
     constructor() {
-      this._state = { count: 0 }
+      this.count = 0
     }
   }
 
@@ -59,42 +57,42 @@ it('works as a decorator', () => {
   @subscribable
   class Foo {
     constructor() {
-      this._state = { count: 0 }
+      this.count = 0
     }
 
     increment() {
-      this._state.count += 1
+      this.count += 1
     }
 
     decrement() {
-      this._state.count -= 1
+      this.count -= 1
     }
   }
 
   const foo = new Foo()
   foo.increment()
 
-  expect(foo.state.count).toEqual(1)
+  expect(foo.count).toEqual(1)
 })
 
 it('works as a function', () => {
   const Foo = subscribable(class Foo {
     constructor() {
-      this._state = { count: 0 }
+      this.count = 0
     }
     increment() {
-      this._state.count += 1
+      this.count += 1
     }
 
     decrement() {
-      this._state.count -= 1
+      this.count -= 1
     }
   })
 
   const foo = new Foo()
   foo.increment()
 
-  expect(foo.state.count).toEqual(1)
+  expect(foo.count).toEqual(1)
 })
 
 // Tests adapted from https://github.com/reactjs/redux/blob/4e5f7ef3569e9ef6d02f7b3043b290dc093c853b/test/createStore.spec.js#L613
@@ -129,11 +127,11 @@ describe('Symbol.observable interop point', () => {
     @subscribable
     class Foo {
       constructor() {
-        this._state = { count: 0 }
+        this.count = 0
       }
 
       increment() {
-        this._state.count += 1
+        this.count += 1
       }
     }
     const foo = new Foo()
@@ -158,11 +156,11 @@ describe('Symbol.observable interop point', () => {
     @subscribable
     class Foo {
       constructor() {
-        this._state = { count: 0 }
+        this.count = 0
       }
 
       increment() {
-        this._state.count += 1
+        this.count += 1
       }
     }
     const foo = new Foo()

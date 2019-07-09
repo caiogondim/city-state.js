@@ -22,22 +22,20 @@ children whenever there is a new value.
 // Model
 //
 
-import { Subscribe } from 'city-state'
+import { subscribable } from 'city-state'
 
 @subscribable
 class Counter {
   constructor() {
-    this._state = {
-      count: 0
-    }
+    this.count = 0
   }
 
   increment() {
-    this._state.count += 1
+    this.count += 1
   }
 
   decrement() {
-    this._state.count -= 1
+    this.count -= 1
   }
 }
 
@@ -48,12 +46,13 @@ const counter = new Counter()
 //
 
 import React from 'react'
+import { Subscribe } from 'city-state'
 
 export default function CounterView({ counter }) {
   <Subscribe to={[counter]}>
-    {(counterState => {
-      return <span>Counter: {counterState.counter}</span>
-    })}
+    {(counter) => (
+      <span>Counter: {counterState.counter}</span>
+    )}
   </Subscribe>
 }
 ```
@@ -63,9 +62,9 @@ Redux offers an Observable API that could be used with `Subscribe`.
 ```js
 function CounterView({ reduxStore }) {
   <Subscribe to=[reduxStore]>
-    {(currentState => {
-      return <span>Counter: {currentState.counter}</span>
-    })}
+    {currentState => (
+      <span>Counter: {currentState.counter}</span>
+    )}
   </Subscribe>
 }
 ```
@@ -75,11 +74,10 @@ For a working example, see the code on [`/examples`](/examples/index.js)
 ### `@subscribable`
 
 Adds a minimal Observable interface to a class.
+Whenever a property is changed on the subscribable object, all subscribers are notified.
 
 Interface:
 
-- `this.state`: read-only instance state
-- `this._state`: readable and writable state. Will be changed to `this.#state` once private properties reach stage 4
 - `this.subscribe()`: Observable subscribe method
 - `this[$$obseravble]`: Symbol.Observable interop point
 
@@ -89,15 +87,15 @@ import { subscribable } from 'city-state';
 @subscribable
 class Counter {
   constructor() {
-    this._state = { count: 0 }
+    this.count = 0
   }
 
   increment() {
-    this._state.count += 1
+    this.count += 1
   }
 
   decrement() {
-    this._state.count -= 1
+    this.count -= 1
   }
 }
 

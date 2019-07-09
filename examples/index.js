@@ -12,28 +12,30 @@ const { Subscribe, subscribable, devtool } = require('../src')
 @subscribable
 class Counter {
   constructor () {
-    this._state = { count: 0 }
+    this.count = 0
   }
 
   increment () {
-    this._state.count += 1
+    this.count += 1
   }
 
   decrement () {
-    this._state.count -= 1
+    this.count -= 1
   }
 }
 const counter = new Counter()
-devtool(counter, { name: 'Counter' })
+try {
+  devtool(counter, { name: 'Counter' })
+} catch (_) {}
 
 function CounterView () {
   return (
     <Subscribe to={[counter]}>
-      {(counterState) => {
+      {() => {
         return (
           <div>
             <h1>Counter</h1>
-            <p>state: {counterState.count}</p>
+            <p>state: {counter.count}</p>
             <button onClick={() => counter.increment()}>Increment +</button><br />
             <button onClick={() => counter.decrement()}>Decrement -</button><br />
           </div>
@@ -50,39 +52,39 @@ function CounterView () {
 @subscribable
 class CounterAsync {
   constructor () {
-    this._state = {
-      count: 0,
-      isComputing: false
-    }
+    this.count = 0
+    this.isComputing = false
   }
 
   async increment () {
-    this._state.isComputing = true
+    this.isComputing = true
     await msleep(1000)
-    this._state.count += 1
-    this._state.isComputing = false
+    this.count += 1
+    this.isComputing = false
   }
 
   async decrement () {
-    this._state.isComputing = true
+    this.isComputing = true
     await msleep(1000)
-    this._state.count -= 1
-    this._state.isComputing = false
+    this.count -= 1
+    this.isComputing = false
   }
 }
 const counterAsync = new CounterAsync()
-devtool(counterAsync, { name: 'CounterAsync' })
+try {
+  devtool(counterAsync, { name: 'CounterAsync' })
+} catch (_) {}
 
 function CounterAsyncView () {
   return (
     <Subscribe to={[counterAsync]}>
-      {(counterState) => {
+      {(counterAsync) => {
         return (
           <div>
             <h1>Counter Async</h1>
-            <p>state: {counterState.isComputing ? '...' : counterState.count}</p>
-            <button disabled={counterState.isComputing} onClick={() => counterAsync.increment()}>Increment +</button><br />
-            <button disabled={counterState.isComputing} onClick={() => counterAsync.decrement()}>Decrement -</button><br />
+            <p>state: {counterAsync.isComputing ? '...' : counterAsync.count}</p>
+            <button disabled={counterAsync.isComputing} onClick={() => counterAsync.increment()}>Increment +</button><br />
+            <button disabled={counterAsync.isComputing} onClick={() => counterAsync.decrement()}>Decrement -</button><br />
           </div>
         )
       }}
@@ -132,23 +134,29 @@ function CounterReduxView () {
 // Native Observable
 //
 
-const counter2 = new Counter()
-const observableCounter = from(counter2)
-function ObservableCounterView () {
-  return (
-    <Subscribe to={[observableCounter]}>
-      {(counterState = {}) => {
-        return (
-          <div>
-            <h1>Counter Observable</h1>
-            <p>state: {counterState.count}</p>
-            <button onClick={() => counter2.increment()}>Increment +</button><br />
-            <button onClick={() => counter2.decrement()}>Decrement -</button><br />
-          </div>
-        )
-      }}
-    </Subscribe>
-  )
+let ObservableCounterView = null
+// RxJS is throwing an error on Safari
+try {
+  const counter2 = new Counter()
+  const observableCounter = from(counter2)
+  ObservableCounterView = () => {
+    return (
+      <Subscribe to={[observableCounter]}>
+        {(counterState = {}) => {
+          return (
+            <div>
+              <h1>Counter Observable</h1>
+              <p>state: {counterState.count}</p>
+              <button onClick={() => counter2.increment()}>Increment +</button><br />
+              <button onClick={() => counter2.decrement()}>Decrement -</button><br />
+            </div>
+          )
+        }}
+      </Subscribe>
+    )
+  }
+} catch (error) {
+  ObservableCounterView = () => null
 }
 
 //
@@ -160,8 +168,15 @@ class TimerView extends React.Component {
     super()
     this.interval1 = interval(2000)
     this.interval2 = interval(1000)
-    devtool(this.interval1, { name: 'interval1' })
-    devtool(this.interval2, { name: 'interval2' })
+    try {
+      devtool(this.interval1, { name: 'interval1' })
+      devtool(this.interval2, { name: 'interval2' })
+    } catch (_) {}
+  }
+
+  // RxJS is throwing an error on Safari
+  componentDidCatch () {
+    return null
   }
 
   render () {
@@ -171,8 +186,8 @@ class TimerView extends React.Component {
           return (
             <div>
               <h1>rxjs</h1>
-              <p>time1: {time1}</p>
-              <p>time2: {time2}</p>
+              <p>time1: {time1 || 0}</p>
+              <p>time2: {time2 || 0}</p>
             </div>
           )
         }}

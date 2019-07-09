@@ -11,17 +11,15 @@ configure({ adapter: new Adapter() });
 @subscribable
 class Foo {
   constructor() {
-    this._state = {
-      count: 0
-    }
+    this.count = 0
   }
 
   increment() {
-    this._state.count += 1
+    this.count += 1
   }
 
   decrement() {
-    this._state.count -= 1
+    this.count -= 1
   }
 }
 
@@ -35,9 +33,9 @@ it('re-renders children whenever observable changes', async () => {
   function FooComponent() {
     return (
       <Subscribe to={[foo]}>
-        {(fooState) => {
+        {() => {
           return (
-            <span className="fooState">{fooState.count}</span>
+            <span className="fooState">{foo.count}</span>
           )
         }}
       </Subscribe>
@@ -55,15 +53,14 @@ it('accepts multiple observables', async () => {
   const foo = new Foo()
   const bar = new Foo()
 
-
   function FooComponent() {
     return (
       <Subscribe to={[foo, bar]}>
-        {(fooState, barState) => {
+        {(foo, bar) => {
           return (
             <div>
-              <span className="fooState">{fooState.count}</span>
-              <span className="barState">{barState.count}</span>
+              <span className="fooState">{foo.count}</span>
+              <span className="barState">{bar.count}</span>
             </div>
           )
         }}
@@ -105,10 +102,10 @@ it('unsubscribe from all subscriptions when component unmounts', async () => {
 
       return (
         <Subscribe to={[foo]}>
-          {(fooState) => {
+          {() => {
             return (
               <div>
-                <span className="fooState">{fooState.count}</span>
+                <span className="fooState">{foo.count}</span>
               </div>
             )
           }}
